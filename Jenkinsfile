@@ -1,13 +1,11 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/tahirbalouch113/ci-cd-python-learning.git'
-            }
-        }
+    environment {
+        PYTHONPATH = '.'
+    }
 
+    stages {
         stage('Setup') {
             steps {
                 bat 'python -m pip install --upgrade pip'
