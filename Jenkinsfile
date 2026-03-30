@@ -5,11 +5,6 @@ pipeline {
         PYTHONPATH = '.'
     }
 
-	stage('Build') {
-    steps {
-        bat 'python build.py'
-    }
-}
     stages {
         stage('Setup') {
             steps {
@@ -29,18 +24,18 @@ pipeline {
                 bat 'python -m pytest -m integration --junitxml=integration-report.xml'
             }
         }
+
+        stage('Build') {
+            steps {
+                bat 'python build.py'
+            }
+        }
     }
 
     post {
         always {
             junit 'unit-report.xml, integration-report.xml'
+            archiveArtifacts artifacts: 'dist/**', fingerprint: true
         }
     }
-	
-	post {
-    always {
-        junit 'unit-report.xml, integration-report.xml'
-        archiveArtifacts artifacts: 'dist/**', fingerprint: true
-		}
-	}
 }
