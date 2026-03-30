@@ -15,14 +15,20 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                bat 'python -m pytest -m unit'
+                bat 'python -m pytest -m unit --junitxml=unit-report.xml'
             }
         }
 
         stage('Integration Tests') {
             steps {
-                bat 'python -m pytest -m integration'
+                bat 'python -m pytest -m integration --junitxml=integration-report.xml'
             }
+        }
+    }
+
+    post {
+        always {
+            junit 'unit-report.xml, integration-report.xml'
         }
     }
 }
