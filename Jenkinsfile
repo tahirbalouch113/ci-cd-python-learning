@@ -5,6 +5,11 @@ pipeline {
         PYTHONPATH = '.'
     }
 
+	stage('Build') {
+    steps {
+        bat 'python build.py'
+    }
+}
     stages {
         stage('Setup') {
             steps {
@@ -31,4 +36,11 @@ pipeline {
             junit 'unit-report.xml, integration-report.xml'
         }
     }
+	
+	post {
+    always {
+        junit 'unit-report.xml, integration-report.xml'
+        archiveArtifacts artifacts: 'dist/**', fingerprint: true
+		}
+	}
 }
